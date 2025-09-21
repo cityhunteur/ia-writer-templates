@@ -16,11 +16,10 @@ from pathlib import Path
 from typing import Any
 
 
-# Constants for directory paths
-# These paths are relative to the project root
-FRAGMENTS_DIR = Path("src/fragments")
-TEMPLATES_DIR = Path("templates")
-OUTPUT_DIR = Path("dist/templates")
+# Constants for directory paths relative to the project root
+FRAGMENTS_DIR_RELATIVE = Path("src/fragments")
+TEMPLATES_DIR_RELATIVE = Path("templates")
+OUTPUT_DIR_RELATIVE = Path("dist/templates")
 
 
 def get_project_root() -> Path:
@@ -36,6 +35,13 @@ def get_project_root() -> Path:
             return parent
     # Fallback to current working directory
     return Path.cwd()
+
+
+# Resolved absolute paths used throughout the module
+PROJECT_ROOT = get_project_root()
+FRAGMENTS_DIR = PROJECT_ROOT / FRAGMENTS_DIR_RELATIVE
+TEMPLATES_DIR = PROJECT_ROOT / TEMPLATES_DIR_RELATIVE
+OUTPUT_DIR = PROJECT_ROOT / OUTPUT_DIR_RELATIVE
 
 
 def slugify(name: str) -> str:
@@ -271,7 +277,8 @@ def build_bundle(template_dir: Path) -> None:
                 encoding="utf-8",
             )
         except FileNotFoundError:
-            # Skip missing fragments (e.g., GitHub template only has document.html)
+            # Skip missing fragments.
+            # GitHub template only requires document.html.
             if fragment_name == "document.html":
                 # document.html is required
                 raise
@@ -323,13 +330,6 @@ def main() -> None:
         RuntimeError: If no templates directory exists or no templates found.
         SystemExit: On any build errors.
     """
-    # Get the project root and set up paths
-    root = get_project_root()
-    global FRAGMENTS_DIR, TEMPLATES_DIR, OUTPUT_DIR
-    FRAGMENTS_DIR = root / FRAGMENTS_DIR
-    TEMPLATES_DIR = root / TEMPLATES_DIR
-    OUTPUT_DIR = root / OUTPUT_DIR
-
     # Clean and recreate output directory
     if OUTPUT_DIR.parent.exists():
         shutil.rmtree(OUTPUT_DIR.parent)

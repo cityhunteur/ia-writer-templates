@@ -7,14 +7,20 @@ the original template from iA Writer Templates repository.
 import filecmp
 import shutil
 import subprocess
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from pytest import MonkeyPatch
 
+import ia_writer_templates.main as main_module
 from ia_writer_templates.main import build_bundle, get_project_root
 
 
-def get_github_template_fixture(test_file_path):
+Environment = dict[str, Path]
+
+
+def get_github_template_fixture(test_file_path: str) -> Path:
     """Get the GitHub template from fixtures directory or download if needed."""
     # Get the test directory
     test_dir = Path(test_file_path).parent
@@ -31,11 +37,17 @@ def get_github_template_fixture(test_file_path):
 
     if not temp_dir.exists():
         print(f"Fixture not found at {fixture_template}")
-        print(f"Downloading from GitHub...")
+        print("Downloading from GitHub...")
+        git_executable = shutil.which("git")
+        if git_executable is None:
+            msg = "Git executable not found on PATH"
+            raise RuntimeError(msg)
+
         subprocess.run(
-            ["git", "clone", "--depth", "1", repo_url, str(temp_dir)],
+            [git_executable, "clone", "--depth", "1", repo_url, str(temp_dir)],
             check=True,
             capture_output=True,
+            text=True,
         )
 
         # Copy the GitHub template to fixtures
@@ -50,7 +62,7 @@ def get_github_template_fixture(test_file_path):
 
 
 @pytest.fixture
-def setup_test_env(tmp_path):
+def setup_test_env(tmp_path: Path) -> Environment:
     """Set up test environment with clean output directory."""
     # Get project root
     root = get_project_root()
@@ -71,21 +83,21 @@ def setup_test_env(tmp_path):
     }
 
 
-def normalize_file(file_path):
+def normalize_file(file_path: Path) -> str | bytes:
     """Read file and normalize whitespace for comparison."""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read()
+        with file_path.open(encoding="utf-8") as handle:
+            content = handle.read()
             # Strip trailing whitespace from each line and file
             lines = [line.rstrip() for line in content.splitlines()]
             return "\n".join(lines).strip()
     except Exception:
         # For binary files, just read as bytes
-        with open(file_path, "rb") as f:
-            return f.read()
+        with file_path.open("rb") as handle:
+            return handle.read()
 
 
-def compare_files(file1, file2):
+def compare_files(file1: Path, file2: Path) -> bool:
     """Compare two files, ignoring trailing whitespace."""
     # For CSS and other binary files, do exact comparison
     if file1.suffix in [".css", ".txt", ".pdf", ".jpg", ".png"]:
@@ -95,14 +107,18 @@ def compare_files(file1, file2):
     return normalize_file(file1) == normalize_file(file2)
 
 
-def compare_directories(dir1, dir2):
+def compare_directories(dir1: Path, dir2: Path) -> tuple[bool, str]:
     """Recursively compare two directories."""
     dir1 = Path(dir1)
     dir2 = Path(dir2)
 
     # Get all files in both directories
-    files1 = set(p.relative_to(dir1) for p in dir1.rglob("*") if p.is_file())
-    files2 = set(p.relative_to(dir2) for p in dir2.rglob("*") if p.is_file())
+    files1 = {
+        path.relative_to(dir1) for path in dir1.rglob("*") if path.is_file()
+    }
+    files2 = {
+        path.relative_to(dir2) for path in dir2.rglob("*") if path.is_file()
+    }
 
     # Check if same files exist
     if files1 != files2:
@@ -140,7 +156,7 @@ def compare_directories(dir1, dir2):
 class TestGitHubTemplate:
     """Test GitHub template generation."""
 
-    def test_github_template_exists(self, setup_test_env):
+    def test_github_template_exists(self, setup_test_env: Environment) -> None:
         """Test that GitHub template source files exist."""
         env = setup_test_env
         template_dir = env["template_dir"]
@@ -155,7 +171,10 @@ class TestGitHubTemplate:
         assert (template_dir / "github.css").exists(), "github.css not found"
         assert (template_dir / "LICENSE.txt").exists(), "LICENSE.txt not found"
 
-    def test_original_template_exists(self, setup_test_env):
+    def test_original_template_exists(
+        self,
+        setup_test_env: Environment,
+    ) -> None:
         """Test that original GitHub template exists for comparison."""
         env = setup_test_env
         original = env["original_template"]
@@ -168,12 +187,13 @@ class TestGitHubTemplate:
             "Original Resources directory not found"
         )
 
-    def test_build_github_template(self, setup_test_env, monkeypatch):
+    def test_build_github_template(
+        self,
+        setup_test_env: Environment,
+        monkeypatch: MonkeyPatch,
+    ) -> None:
         """Test building the GitHub template."""
         env = setup_test_env
-
-        # Monkey-patch the OUTPUT_DIR in main module
-        import ia_writer_templates.main as main_module
 
         monkeypatch.setattr(main_module, "OUTPUT_DIR", env["output_dir"])
 
@@ -193,12 +213,13 @@ class TestGitHubTemplate:
             "Resources not found"
         )
 
-    def test_generated_matches_original(self, setup_test_env, monkeypatch):
+    def test_generated_matches_original(
+        self,
+        setup_test_env: Environment,
+        monkeypatch: MonkeyPatch,
+    ) -> None:
         """Test that generated GitHub template matches the original."""
         env = setup_test_env
-
-        # Monkey-patch the OUTPUT_DIR
-        import ia_writer_templates.main as main_module
 
         monkeypatch.setattr(main_module, "OUTPUT_DIR", env["output_dir"])
 
@@ -212,12 +233,13 @@ class TestGitHubTemplate:
         matches, message = compare_directories(original, generated)
         assert matches, f"Generated template does not match original: {message}"
 
-    def test_info_plist_content(self, setup_test_env, monkeypatch):
+    def test_info_plist_content(
+        self,
+        setup_test_env: Environment,
+        monkeypatch: MonkeyPatch,
+    ) -> None:
         """Test that Info.plist contains correct values."""
         env = setup_test_env
-
-        # Monkey-patch the OUTPUT_DIR
-        import ia_writer_templates.main as main_module
 
         monkeypatch.setattr(main_module, "OUTPUT_DIR", env["output_dir"])
 
@@ -240,12 +262,13 @@ class TestGitHubTemplate:
         assert "https://github.com/" in content, "Author URL not found"
         assert "<integer>90</integer>" in content, "Height values not found"
 
-    def test_css_files_copied(self, setup_test_env, monkeypatch):
+    def test_css_files_copied(
+        self,
+        setup_test_env: Environment,
+        monkeypatch: MonkeyPatch,
+    ) -> None:
         """Test that all CSS files are copied correctly."""
         env = setup_test_env
-
-        # Monkey-patch the OUTPUT_DIR
-        import ia_writer_templates.main as main_module
 
         monkeypatch.setattr(main_module, "OUTPUT_DIR", env["output_dir"])
 
@@ -274,12 +297,13 @@ class TestGitHubTemplate:
                 f"{css_file} content differs from original"
             )
 
-    def test_no_extra_html_files(self, setup_test_env, monkeypatch):
+    def test_no_extra_html_files(
+        self,
+        setup_test_env: Environment,
+        monkeypatch: MonkeyPatch,
+    ) -> None:
         """Test that no extra HTML files are generated for GitHub template."""
         env = setup_test_env
-
-        # Monkey-patch the OUTPUT_DIR
-        import ia_writer_templates.main as main_module
 
         monkeypatch.setattr(main_module, "OUTPUT_DIR", env["output_dir"])
 
@@ -310,7 +334,7 @@ class TestGitHubTemplate:
 
 
 @pytest.fixture(autouse=True)
-def cleanup_dist():
+def cleanup_dist() -> Iterator[None]:
     """Clean up dist directory after each test."""
     yield
     # Cleanup happens after test

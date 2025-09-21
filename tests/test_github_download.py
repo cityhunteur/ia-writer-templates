@@ -1,12 +1,11 @@
 """Test GitHub template fixture availability."""
 
+import shutil
 import subprocess
 from pathlib import Path
 
-import pytest
 
-
-def test_github_template_fixture_exists():
+def test_github_template_fixture_exists() -> None:
     """Test that GitHub template exists in fixtures directory."""
     fixtures_dir = Path(__file__).parent / "fixtures"
     template_path = fixtures_dir / "GitHub.iatemplate" / "Contents"
@@ -36,14 +35,19 @@ def test_github_template_fixture_exists():
     print(f"GitHub template fixture found at: {template_path}")
 
 
-def test_download_github_template_if_missing(tmp_path):
-    """Test that we can download the GitHub template from repository if fixture is missing."""
+def test_download_github_template_if_missing(tmp_path: Path) -> None:
+    """Download the GitHub template from the upstream repository when absent."""
     repo_url = "https://github.com/iainc/iA-Writer-Templates.git"
     repo_dir = tmp_path / "iA-Writer-Templates"
 
+    git_executable = shutil.which("git")
+    if git_executable is None:
+        msg = "Git executable not found on PATH"
+        raise RuntimeError(msg)
+
     # Clone from GitHub
-    result = subprocess.run(
-        ["git", "clone", "--depth", "1", repo_url, str(repo_dir)],
+    subprocess.run(
+        [git_executable, "clone", "--depth", "1", repo_url, str(repo_dir)],
         check=True,
         capture_output=True,
         text=True,
@@ -75,4 +79,4 @@ if __name__ == "__main__":
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        test_download_github_template(Path(tmpdir))
+        test_download_github_template_if_missing(Path(tmpdir))
