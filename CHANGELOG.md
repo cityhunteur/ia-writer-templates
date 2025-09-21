@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.0 (2025-09-21)
+
+
+### Features
+
+* Initializes project structure ([87fb4a9](https://github.com/cityhunteur/ia-writer-templates/commit/87fb4a9688d37fd0459b2a3f233c2856a58e8bd7))
+* removes the pypi publishing step from the release workflow. ([1c4206b](https://github.com/cityhunteur/ia-writer-templates/commit/1c4206b50ebb225082b588310666f8fb0801dcdf))
+
 ## [0.1.0] - 2025-09-21
 
 ### Features
