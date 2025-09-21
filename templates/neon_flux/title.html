@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title data-title>Neon Flux</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cover {
+      position: relative;
+      min-height: 100vh;
+      box-sizing: border-box;
+      padding: 28mm 24mm 24mm;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+    .cover::before, .cover::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+    }
+    .cover::before {
+      background:
+        radial-gradient(120% 80% at 10% 0%, var(--title-glow-a), transparent 60%),
+        radial-gradient(100% 60% at 90% 20%, var(--title-glow-b), transparent 65%),
+        radial-gradient(120% 70% at 50% 100%, var(--title-glow-c), transparent 60%);
+      mix-blend-mode: screen;
+    }
+    .cover::after {
+      background-image:
+        linear-gradient(to right, var(--grid-stroke) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-stroke) 1px, transparent 1px);
+      background-size: 16mm 16mm;
+      opacity: 0.25;
+    }
+    .brand { color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; font-size: 10pt; }
+    .doc-title {
+      font-size: 64pt; line-height: 1.02; font-weight: 900; letter-spacing: -0.3pt;
+      margin: 10mm 0 12mm 0;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,0.2));
+      max-width: 170mm;
+    }
+    .subtitle { color: var(--ink-60); font-size: 12pt; max-width: 140mm; }
+    .meta { margin-top: 12mm; font-size: 10pt; color: var(--ink-60); }
+    .orb {
+      position: absolute; right: -40mm; bottom: -40mm;
+      width: 140mm; height: 140mm; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--orb-a), var(--orb-b) 40%, rgba(0,0,0,0) 70%);
+      filter: blur(8px) saturate(120%);
+    }
+  </style>
+</head>
+<body>
+  <main class="cover">
+    <div class="brand" data-author>Author</div>
+    <div>
+      <h1 class="doc-title" data-title>Neon Flux</h1>
+      <p class="subtitle">An original, dual‑mode iA Writer template.</p>
+    </div>
+    <div class="meta"><span data-date="d MMMM yyyy"></span></div>
+    <div class="orb" aria-hidden="true"></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>{development_region}</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleIdentifier</key>
+	<string>{identifier}</string>
+	<key>CFBundleName</key>
+	<string>{name}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>{version}</string>
+	<key>CFBundleVersion</key>
+	<string>{bundle_version}</string>
+	<key>IATemplateDocumentFile</key>
+	<string>document</string>
+	<key>IATemplateFooterHeight</key>
+	<integer>{footer_height}</integer>
+	<key>IATemplateHeaderHeight</key>
+	<integer>{header_height}</integer>
+	<key>IATemplateDescription</key>
+	<string>{description}</string>
+	<key>IATemplateAuthor</key>
+	<string>{author}</string>
+	<key>IATemplateAuthorURL</key>
+	<string>{author_url}</string>
+</dict>
+</plist>

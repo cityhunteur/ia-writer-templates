@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hdr {
+      position: relative; box-sizing: border-box; width: 100%;
+      padding: 0 22mm; height: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 9pt; color: var(--ink-60); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .hdr::after{
+      content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+      opacity: .6;
+    }
+    .left { display:flex; gap:6mm; align-items:baseline; }
+    .short { color: var(--ink-70); }
+    @media print {
+      .hdr { border-bottom: 1px solid var(--rule); }
+      .hdr::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hdr">
+    <div class="left">
+      <span class="short">NEON FLUX</span>
+      <span data-title></span>
+    </div>
+    <div class="right"><span></span></div>
+  </div>
+</body>
+</html>

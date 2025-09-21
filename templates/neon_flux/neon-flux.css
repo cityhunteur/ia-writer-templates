@@ -1,0 +1,138 @@
+/* Neon Flux – Main CSS file following GitHub template pattern */
+
+/* Import light mode for both screen and print (ensures PDF always uses light theme) */
+@import 'neon-flux-light.css' screen, print;
+
+/* Import dark mode only for screen (never for print) */
+@import 'neon-flux-dark.css' screen;
+
+/* Base layout */
+.page {
+  padding: 0 22mm;
+  box-sizing: border-box;
+}
+
+/* Screen-specific layout with responsive padding */
+@media screen {
+  .page {
+    margin: 0 auto;
+    max-width: 830px;
+    padding: 0;  /* Reset padding first */
+    --horizontal-padding: 45px;
+    padding-left: var(--horizontal-padding);
+    padding-right: var(--horizontal-padding);
+  }
+
+  .prose pre {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Safe area insets for iOS devices */
+@supports (padding: constant(safe-area-inset-left)) and (padding: constant(safe-area-inset-right)) {
+  @media screen {
+    .page {
+      padding-left: calc(var(--horizontal-padding) + constant(safe-area-inset-left));
+      padding-right: calc(var(--horizontal-padding) + constant(safe-area-inset-right));
+    }
+  }
+}
+
+@supports (padding: env(safe-area-inset-left)) and (padding: env(safe-area-inset-right)) {
+  @media screen {
+    .page {
+      padding-left: calc(var(--horizontal-padding) + env(safe-area-inset-left));
+      padding-right: calc(var(--horizontal-padding) + env(safe-area-inset-right));
+    }
+  }
+}
+
+/* Responsive breakpoints for screen */
+@media screen and (max-width: 420px) {
+  .page {
+    --horizontal-padding: 15px;
+  }
+}
+
+@media screen and (min-width: 420px) and (max-width: 500px) {
+  .page {
+    --horizontal-padding: 25px;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 550px) {
+  .page {
+    --horizontal-padding: 30px;
+  }
+}
+
+@media screen and (min-width: 550px) and (max-width: 767px) {
+  .page {
+    --horizontal-padding: 35px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .page {
+    --horizontal-padding: 45px;
+  }
+}
+
+/* Print settings */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  .page {
+    padding: 0 22mm;
+  }
+
+  .prose p {
+    widows: 2;      /* avoid single lines at... */
+    orphans: 2;     /* ...begin and end of page */
+  }
+
+  .prose pre code {
+    white-space: pre-wrap;
+  }
+
+  /* Avoid page breaks after headlines */
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    page-break-inside: avoid;
+  }
+
+  .prose h1::after,
+  .prose h2::after,
+  .prose h3::after,
+  .prose h4::after,
+  .prose h5::after,
+  .prose h6::after {
+    content: "";
+    display: block;
+    height: 50px;
+    margin-bottom: -50px;
+  }
+
+  /* Ensure blockquotes don't have backdrop-filter in print */
+  .prose blockquote {
+    backdrop-filter: none;
+  }
+}
+
+/* Utilities */
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+
+.smallcaps {
+  font-variant: all-small-caps;
+  letter-spacing: 0.4px;
+}

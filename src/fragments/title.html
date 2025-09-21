@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title data-title>{title_name}</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cover {
+      position: relative;
+      min-height: 100vh;
+      box-sizing: border-box;
+      padding: 28mm 24mm 24mm;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+    /* Futuristic background: layered gradients + gridlines */
+    .cover::before,
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .cover::before {
+      background: var(--cover-before);
+      mix-blend-mode: screen;
+    }
+    .cover::after {
+      background-image:
+        linear-gradient(to right, var(--cover-grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--cover-grid-color) 1px, transparent 1px);
+      background-size: 16mm 16mm;
+      opacity: 0.25;
+    }
+    .brand {
+      color: var(--muted);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 10pt;
+    }
+    .doc-title {
+      font-size: 64pt;
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -0.3pt;
+      margin: 10mm 0 12mm 0;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: var(--doc-title-shadow);
+      max-width: 170mm;
+    }
+    .subtitle {
+      color: var(--subtitle-color);
+      font-size: 12pt;
+      max-width: 140mm;
+    }
+    .meta {
+      margin-top: 12mm;
+      font-size: 10pt;
+      color: var(--meta-color);
+    }
+    .orb {
+      position: absolute;
+      right: -40mm;
+      bottom: -40mm;
+      width: 140mm;
+      height: 140mm;
+      border-radius: 50%;
+      background: var(--orb-bg);
+      filter: blur(8px) saturate(120%);
+    }
+  </style>
+</head>
+<body>
+  <main class="cover">
+    <div class="brand" data-author>Author</div>
+    <div>
+      <h1 class="doc-title" data-title>{title_name}</h1>
+      <p class="subtitle">{subtitle}</p>
+    </div>
+    <div class="meta"><span data-date="d MMMM yyyy"></span></div>
+    <div class="orb" aria-hidden="true"></div>
+  </main>
+</body>
+</html>

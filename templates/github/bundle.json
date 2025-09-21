@@ -1,0 +1,22 @@
+{
+  "name": "GitHub",
+  "identifier": "net.ia.writer.template.github",
+  "description": "GitHub document style.",
+  "author": "iA",
+  "author_url": "https://github.com/",
+  "version": "1.0.1",
+  "bundle_version": "2",
+  "development_region": "en",
+  "bundle_dir": "GitHub.iatemplate",
+  "slug": "github",
+  "header_height": 90,
+  "footer_height": 90,
+  "assets": [
+    "document.html",
+    "github.css",
+    "github-markdown-light.css",
+    "github-markdown-dark.css",
+    "LICENSE.txt"
+  ],
+  "skip_fragments": ["title.html", "header.html", "footer.html"]
+}

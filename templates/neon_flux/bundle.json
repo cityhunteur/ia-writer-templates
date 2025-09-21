@@ -1,0 +1,26 @@
+{
+  "name": "Neon Flux",
+  "identifier": "com.github.cityhunteur.ia.writer.templates.neon.flux",
+  "description": "Original, futuristic iA Writer template with unified light/dark for Preview and PDF.",
+  "author": "Pravin Goomannee",
+  "author_url": "",
+  "version": "1.0.1",
+  "bundle_version": "2",
+  "development_region": "en",
+  "bundle_dir": "Neon-Flux.iatemplate",
+  "slug": "neon_flux",
+  "header_height": 56,
+  "footer_height": 40,
+  "assets": [
+    "document.html",
+    "title.html",
+    "header.html",
+    "footer.html",
+    "style.css",
+    "LICENSE.txt"
+  ],
+  "skip_fragments": [],
+  "supports_smart_tables": true,
+  "supports_math": true,
+  "title_uses_header_footer_height": false
+}

@@ -1,0 +1,123 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: python
+          package-name: ia-writer-templates
+          extra-files: |
+            templates/github/bundle.json
+            templates/neon_flux/bundle.json
+
+  build-and-upload:
+    name: Build and Upload Release Assets
+    needs: release-please
+    if: needs.release-please.outputs.release_created
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build templates
+        run: uv run python -m ia_writer_templates.main
+
+      - name: Build Python package
+        run: uv build
+
+      - name: Create template archives
+        run: |
+          cd dist/templates
+
+          # Create individual zip files for each template
+          for template in *.iatemplate; do
+            if [ -d "$template" ]; then
+              template_name="${template%.iatemplate}"
+              zip -r "../${template_name}-${{ needs.release-please.outputs.version }}.zip" "$template"
+              echo "Created ${template_name}-${{ needs.release-please.outputs.version }}.zip"
+            fi
+          done
+
+          # Create a combined archive with all templates
+          cd ..
+          zip -r "ia-writer-templates-${{ needs.release-please.outputs.version }}-all.zip" templates/
+          echo "Created ia-writer-templates-${{ needs.release-please.outputs.version }}-all.zip"
+
+          ls -la *.zip
+
+      - name: Upload Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Upload individual template archives
+          for file in dist/*.zip; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              gh release upload "${{ needs.release-please.outputs.tag_name }}" "$file" --clobber
+            fi
+          done
+
+          # Upload Python package distributions
+          for file in dist/*.whl dist/*.tar.gz; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              gh release upload "${{ needs.release-please.outputs.tag_name }}" "$file" --clobber
+            fi
+          done
+
+  publish-pypi:
+    name: Publish to PyPI
+    needs: release-please
+    if: needs.release-please.outputs.release_created
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/ia-writer-templates
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No need for username/password with trusted publishing
