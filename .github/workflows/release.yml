@@ -92,32 +92,3 @@ jobs:
               gh release upload "${{ needs.release-please.outputs.tag_name }}" "$file" --clobber
             fi
           done
-
-  publish-pypi:
-    name: Publish to PyPI
-    needs: release-please
-    if: needs.release-please.outputs.release_created
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/ia-writer-templates
-    permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-
-      - name: Set up Python
-        run: uv python install 3.13
-
-      - name: Build package
-        run: uv build
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        # No need for username/password with trusted publishing
