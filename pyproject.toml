@@ -1,0 +1,151 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ia-writer-templates"
+version = "0.1.0"
+description = "Generator for custom iA Writer template bundles, including the Neon Flux set."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+authors = [
+    { name = "Pravin Goomannee", email = "5994387+cityhunteur@users.noreply.github.com" },
+]
+keywords = ["iawriter", "templates", "writing", "documentation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Editors",
+    "Topic :: Text Processing :: Markup",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[project.scripts]
+ia-writer-templates = "ia_writer_templates.main:main"
+
+[project.urls]
+Homepage = "https://github.com/cityhunteur/ia-writer-templates"
+Repository = "https://github.com/cityhunteur/ia-writer-templates"
+Issues = "https://github.com/cityhunteur/ia-writer-templates/issues"
+
+[tool.hatch.version]
+path = "src/ia_writer_templates/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/templates",
+    "/README.md",
+    "/LICENSE",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ia_writer_templates"]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "ruff>=0.8.0",
+]
+
+[tool.hatch.envs.default.scripts]
+templates = "python -m ia_writer_templates.main"
+lint = "ruff check src"
+format = "ruff format src"
+check = [
+    "ruff check src",
+    "ruff format --check src",
+]
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.hatch.envs.test.scripts]
+test = "pytest {args:tests}"
+test-cov = "pytest --cov=ia_writer_templates {args:tests}"
+test-integration = "pytest tests/test_github_template.py -v"
+test-all = "pytest tests/ -v"
+
+[tool.ruff]
+line-length = 80
+target-version = "py313"
+src = ["src"]
+extend-exclude = ["dist", ".venv", "build", "*.egg-info"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "ARG",  # flake8-unused-arguments
+    "SIM",  # flake8-simplify
+    "PL",   # pylint
+    "RUF",  # ruff-specific rules
+    "D",    # pydocstyle
+    "N",    # pep8-naming
+    "ANN",  # flake8-annotations
+    "S",    # flake8-bandit
+    "T20",  # flake8-print
+    "PTH",  # flake8-use-pathlib
+    "ERA",  # flake8-eradicate
+    "PD",   # pandas-vet
+    "PGH",  # pygrep-hooks
+    "TRY",  # tryceratops
+    "SLF",  # flake8-self
+    "RET",  # flake8-return
+]
+
+ignore = [
+    "D203",   # one-blank-line-before-class (incompatible with D211)
+    "D213",   # multi-line-summary-second-line (incompatible with D212)
+    "TRY003", # raise-vanilla-string
+    "T201",   # print statements (needed for CLI output)
+    "S603",   # subprocess without shell=True is safe for our use case
+    "PLR0912", # too-many-branches (build_bundle is complex by nature)
+]
+
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D104"]
+"test_*.py" = ["D103", "S101", "PLR2004"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ia_writer_templates"]
+force-single-line = false
+lines-after-imports = 2
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-args = 6
+max-statements = 50
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+line-ending = "lf"
+docstring-code-format = true
+docstring-code-line-length = 72
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10

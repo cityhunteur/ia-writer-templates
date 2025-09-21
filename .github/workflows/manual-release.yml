@@ -1,0 +1,88 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build templates
+        run: uv run python -m ia_writer_templates.main
+
+      - name: Build Python package
+        run: uv build
+
+      - name: Create template archives
+        run: |
+          cd dist/templates
+
+          # Create individual zip files for each template
+          for template in *.iatemplate; do
+            if [ -d "$template" ]; then
+              template_name="${template%.iatemplate}"
+              zip -r "../${template_name}-v${{ inputs.version }}.zip" "$template"
+              echo "Created ${template_name}-v${{ inputs.version }}.zip"
+            fi
+          done
+
+          # Create a combined archive with all templates
+          cd ..
+          zip -r "ia-writer-templates-v${{ inputs.version }}-all.zip" templates/
+          echo "Created ia-writer-templates-v${{ inputs.version }}-all.zip"
+
+          ls -la *.zip
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create release
+          gh release create "v${{ inputs.version }}" \
+            --title "Release v${{ inputs.version }}" \
+            --notes "See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details." \
+            ${{ inputs.prerelease && '--prerelease' || '' }}
+
+          # Upload assets
+          for file in dist/*.zip; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              gh release upload "v${{ inputs.version }}" "$file" --clobber
+            fi
+          done
+
+          # Upload Python package distributions
+          for file in dist/*.whl dist/*.tar.gz; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              gh release upload "v${{ inputs.version }}" "$file" --clobber
+            fi
+          done

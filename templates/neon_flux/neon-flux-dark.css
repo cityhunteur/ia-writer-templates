@@ -1,0 +1,150 @@
+/* Neon Flux Dark – Dark mode overrides (activated by iA Writer's night mode) */
+
+/* Dark mode variables and base styles */
+html.night-mode {
+  color-scheme: dark;
+  --bg: #0b0e13;
+  --ink: #e7e9ee;
+  --ink-70: #bac1cc;
+  --ink-60: #9aa3af;
+  --muted: #8b94a3;
+  --rule: #1f2633;
+
+  /* Neon accents (brighter for dark mode) */
+  --neon-cyan: #18e0ff;
+  --neon-mint: #3df7b6;
+  --neon-violet: #7c5cff;
+
+  --code-bg: #0e1220;
+  --callout-bg: rgba(19, 24, 38, 0.6);
+
+  /* Title page variables for dark mode */
+  --cover-before: radial-gradient(circle at 20% 60%, rgba(24, 224, 255, 0.08), transparent 40%),
+                  radial-gradient(circle at 80% 20%, rgba(106, 92, 255, 0.06), transparent 40%);
+  --cover-grid-color: rgba(24, 224, 255, 0.08);
+  --doc-title-shadow: drop-shadow(0 0 24px rgba(24, 224, 255, 0.4));
+  --subtitle-color: #9aa3af;
+  --meta-color: #8b94a3;
+  --orb-bg: radial-gradient(circle, rgba(24, 224, 255, 0.25), rgba(124, 92, 255, 0.15));
+}
+
+html.night-mode {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html.night-mode body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Subtle scanlines effect for dark mode (screen only) */
+@media screen {
+  html.night-mode body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 2px, transparent 2px, transparent 4px);
+    z-index: 1;
+  }
+}
+
+/* Dark mode typography */
+html.night-mode .prose h1,
+html.night-mode .prose h2,
+html.night-mode .prose h3,
+html.night-mode .prose h4 {
+  color: var(--ink);
+}
+
+/* H2 gradient underline - dark mode with glow */
+html.night-mode .prose h2::after {
+  box-shadow: 0 0 8px rgba(24, 224, 255, 0.5);
+}
+
+/* Dark mode paragraphs */
+html.night-mode .prose p {
+  color: var(--ink);
+}
+
+/* Dark mode links with glow */
+html.night-mode .prose a {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 4px rgba(24, 224, 255, 0.3);
+}
+
+/* Dark mode ordered list counters with glow */
+html.night-mode .prose ol > li::before {
+  filter: drop-shadow(0 0 6px rgba(19, 216, 166, 0.4));
+}
+
+/* Dark mode unordered list markers */
+html.night-mode .prose ul li::marker {
+  color: var(--neon-cyan);
+}
+
+/* Dark mode blockquotes with enhanced glass effect */
+html.night-mode .prose blockquote {
+  background: var(--callout-bg);
+  border-left-color: var(--neon-cyan);
+  border-color: var(--rule);
+  color: var(--ink-70);
+  box-shadow: 0 0 12px rgba(24, 224, 255, 0.1);
+}
+
+/* Dark mode code */
+html.night-mode .prose code {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}
+
+html.night-mode .prose pre {
+  background: linear-gradient(180deg, rgba(124, 92, 255, 0.04), rgba(24, 224, 255, 0.02)), var(--code-bg);
+  border-color: var(--rule);
+  box-shadow: inset 0 1px 0 rgba(24, 224, 255, 0.1);
+}
+
+html.night-mode .prose pre code {
+  border: none;
+}
+
+/* Dark mode tables */
+html.night-mode .prose th,
+html.night-mode .prose td {
+  border-color: var(--rule);
+}
+
+html.night-mode .prose thead th {
+  background: linear-gradient(180deg, rgba(24, 224, 255, 0.08), rgba(124, 92, 255, 0.04));
+}
+
+/* Dark mode images */
+html.night-mode .prose img {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode figcaption */
+html.night-mode .prose figcaption {
+  color: var(--ink-60);
+}
+
+/* Dark mode horizontal rules with glow */
+html.night-mode .prose hr {
+  box-shadow: 0 0 8px rgba(24, 224, 255, 0.2);
+}
+
+/* Dark mode navigation */
+html.night-mode .prose nav a {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+/* Dark mode TOC title with gradient */
+html.night-mode .prose .toc-title {
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

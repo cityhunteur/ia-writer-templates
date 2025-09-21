@@ -1,5 +1,10 @@
 # iA Writer Templates
 
+[![CI](https://github.com/cityhunteur/ia-writer-templates/actions/workflows/ci.yml/badge.svg)](https://github.com/cityhunteur/ia-writer-templates/actions/workflows/ci.yml)
+[![Release](https://github.com/cityhunteur/ia-writer-templates/actions/workflows/release.yml/badge.svg)](https://github.com/cityhunteur/ia-writer-templates/actions/workflows/release.yml)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Python-powered build system for creating installable `.iatemplate` bundles for [iA Writer](https://ia.net/writer). Build custom templates from reusable HTML fragments and CSS themes, with support for both light and dark modes.
 
 ## Features
@@ -83,10 +88,11 @@ ia-writer-templates/
 │   └── neon_flux/           # Neon Flux custom template
 │       ├── bundle.json
 │       ├── document.html
+│       ├── title.html
+│       ├── header.html
+│       ├── footer.html
 │       ├── Info.plist
-│       ├── neon-flux.css
-│       ├── neon-flux-light.css
-│       ├── neon-flux-dark.css
+│       ├── style.css         # Unified light/dark styles
 │       └── LICENSE.txt
 ├── tests/
 │   ├── fixtures/            # Test reference data
@@ -120,18 +126,18 @@ ia-writer-templates/
      "footer_height": 90,
      "assets": [
        "document.html",
-       "style.css",
-       "style-light.css",
-       "style-dark.css"
+       "title.html",
+       "header.html",
+       "footer.html",
+       "style.css"
      ],
      "skip_fragments": []
    }
    ```
 
 3. **Add CSS files**:
-   - `style.css` - Main stylesheet with imports
-   - `style-light.css` - Light mode styles
-   - `style-dark.css` - Dark mode styles
+   - `style.css` - Single unified stylesheet with light/dark mode support
+   - Use `html.night-mode` selector for dark mode overrides
 
 4. **Override fragments** (optional):
    - Place custom HTML files in template directory
@@ -202,6 +208,9 @@ The `tests/fixtures/` directory contains the official GitHub template for compar
 | `footer_height` | integer | Footer area height in pixels |
 | `assets` | array | Files to copy to bundle |
 | `skip_fragments` | array | Fragments to exclude (e.g., ["title.html"]) |
+| `supports_smart_tables` | boolean | Enable smart table support (optional) |
+| `supports_math` | boolean | Enable math/LaTeX support (optional) |
+| `title_uses_header_footer_height` | boolean | Title page uses header/footer heights (optional) |
 
 ### Fragment System
 

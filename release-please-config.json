@@ -1,0 +1,35 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "python",
+      "package-name": "ia-writer-templates",
+      "include-v-in-tag": true,
+      "include-component-in-tag": false,
+      "changelog-sections": [
+        {"type": "feat", "section": "Features", "hidden": false},
+        {"type": "fix", "section": "Bug Fixes", "hidden": false},
+        {"type": "perf", "section": "Performance Improvements", "hidden": false},
+        {"type": "docs", "section": "Documentation", "hidden": false},
+        {"type": "chore", "section": "Miscellaneous", "hidden": false},
+        {"type": "refactor", "section": "Code Refactoring", "hidden": false},
+        {"type": "style", "section": "Style Changes", "hidden": false},
+        {"type": "test", "section": "Tests", "hidden": false},
+        {"type": "build", "section": "Build System", "hidden": false},
+        {"type": "ci", "section": "Continuous Integration", "hidden": false}
+      ],
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "templates/github/bundle.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "templates/neon_flux/bundle.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
+}

@@ -1,0 +1,330 @@
+/* Neon Flux Light – Base styles (default theme) */
+
+:root {
+  /* Base palette – light */
+  --bg: #ffffff;
+  --ink: #0b0e13;
+  --ink-70: #334155;
+  --ink-60: #475569;
+  --muted: #64748b;
+  --rule: #e5e7eb;
+
+  /* Neon accents */
+  --neon-cyan: #18a8ff;
+  --neon-mint: #13d8a6;
+  --neon-violet: #6a5cff;
+
+  --code-bg: #f8fafc;
+  --callout-bg: rgba(240, 247, 255, 0.6);
+
+  /* Title page variables for light mode */
+  --cover-before: radial-gradient(120% 80% at 10% 0%, rgba(14, 165, 233, 0.18), transparent 60%),
+                  radial-gradient(100% 60% at 90% 20%, rgba(124, 92, 255, 0.16), transparent 65%),
+                  radial-gradient(120% 70% at 50% 100%, rgba(61, 247, 182, 0.14), transparent 60%);
+  --cover-grid-color: rgba(0, 0, 0, 0.06);
+  --doc-title-shadow: drop-shadow(0 2px 8px rgba(24, 168, 255, 0.15));
+  --subtitle-color: #475569;
+  --meta-color: #64748b;
+  --orb-bg: radial-gradient(circle, rgba(24, 168, 255, 0.15), rgba(106, 92, 255, 0.08));
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  font-size: 11.2pt;
+  line-height: 1.6;
+  letter-spacing: 0.1px;
+}
+
+/* Typography */
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  margin: 10mm 0 4mm 0;
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -0.1px;
+  color: var(--ink);
+}
+
+/* Explicit print styles to prevent background on headers */
+@media print {
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    background: none !important;
+    background-color: transparent !important;
+    -webkit-print-color-adjust: initial !important;
+    print-color-adjust: initial !important;
+    color: var(--ink) !important;
+  }
+}
+
+.prose h1 { font-size: 30pt; }
+.prose h2 {
+  font-size: 22pt;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  position: relative;
+  padding-bottom: 2mm;
+}
+.prose h3 { font-size: 15pt; font-weight: 800; }
+.prose h4 { font-size: 12.5pt; font-weight: 700; }
+
+/* Neon underline for h2 - screen only */
+@media screen {
+  .prose h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 64mm;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+    border-radius: 2px;
+  }
+}
+
+/* Neon underline for h2 - print uses solid color */
+@media print {
+  .prose h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 64mm;
+    height: 2px;
+    background: var(--neon-cyan);
+    border-radius: 2px;
+  }
+}
+
+/* Paragraphs */
+.prose p {
+  margin: 0 0 4mm 0;
+  color: var(--ink);
+}
+
+/* Links */
+.prose a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+}
+.prose a:hover {
+  text-decoration: underline;
+}
+
+/* Lists with 01/02 counters */
+.prose ol {
+  list-style: none;
+  counter-reset: item;
+  margin: 4mm 0 6mm 0;
+  padding: 0;
+}
+.prose ol > li {
+  counter-increment: item;
+  position: relative;
+  padding-left: 16mm;
+  margin: 2.4mm 0;
+}
+
+/* Ordered list numbering - screen with gradient */
+@media screen {
+  .prose ol > li::before {
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.3mm;
+    font-weight: 900;
+    font-size: 10pt;
+    letter-spacing: 0.08em;
+    color: var(--neon-cyan); /* Fallback */
+    background-image: linear-gradient(90deg, var(--neon-mint), var(--neon-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Ordered list numbering - print with solid color */
+@media print {
+  .prose ol > li::before {
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.3mm;
+    font-weight: 900;
+    font-size: 10pt;
+    letter-spacing: 0.08em;
+    color: var(--neon-cyan);
+  }
+}
+
+/* Unordered lists – triangular bullets */
+.prose ul {
+  margin: 3mm 0 5mm 0;
+  padding-left: 6mm;
+}
+.prose ul li {
+  margin: 1.6mm 0;
+}
+.prose ul li::marker {
+  content: "▸ ";
+  color: var(--neon-mint);
+  font-weight: 600;
+}
+
+/* Blockquotes – light glass callout */
+.prose blockquote {
+  margin: 6mm 0;
+  padding: 5mm 6mm;
+  background: var(--callout-bg);
+  border: 1px solid var(--rule);
+  border-left: 2.6mm solid var(--neon-cyan);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  color: var(--ink);
+}
+
+/* Backdrop filter for screen only */
+@media screen {
+  .prose blockquote {
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Code */
+.prose code, .prose pre, .prose kbd, .prose samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10.2pt;
+}
+.prose code {
+  background: rgba(175, 184, 193, 0.2);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 85%;
+}
+
+/* Pre blocks - screen with gradient background */
+@media screen {
+  .prose pre {
+    background: linear-gradient(180deg, rgba(104, 88, 255, 0.08), rgba(24, 168, 255, 0.06)), var(--code-bg);
+    border: 1px solid #e6e9f2;
+    border-radius: 6px;
+    padding: 4.5mm;
+    overflow: auto;
+    margin: 5mm 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Pre blocks - print with solid background */
+@media print {
+  .prose pre {
+    background: var(--code-bg);
+    border: 1px solid #e6e9f2;
+    border-radius: 6px;
+    padding: 4.5mm;
+    overflow: auto;
+    margin: 5mm 0;
+  }
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: 100%;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6mm 0;
+}
+.prose th, .prose td {
+  border: 1px solid #e5e7eb;
+  padding: 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Table headers - screen with gradient */
+@media screen {
+  .prose thead th {
+    background: linear-gradient(180deg, rgba(24, 168, 255, 0.10), rgba(106, 92, 255, 0.06));
+    font-weight: 700;
+  }
+}
+
+/* Table headers - print with solid color */
+@media print {
+  .prose thead th {
+    background: rgba(24, 168, 255, 0.08);
+    font-weight: 700;
+  }
+}
+
+/* Figures */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+.prose figure {
+  margin: 6mm 0;
+}
+.prose figcaption {
+  font-size: 9pt;
+  color: var(--ink-60);
+  margin-top: 2mm;
+}
+
+/* Horizontal rule - screen with gradient */
+@media screen {
+  .prose hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-violet), transparent);
+    margin: 8mm 0;
+  }
+}
+
+/* Horizontal rule - print with solid color */
+@media print {
+  .prose hr {
+    border: none;
+    height: 1px;
+    background: var(--neon-cyan);
+    margin: 8mm 0;
+  }
+}
+
+/* TOC styling (links only) */
+.prose nav ul {
+  list-style: none;
+  padding-left: 0;
+}
+.prose nav li {
+  margin: 1.6mm 0;
+}
+.prose nav a {
+  text-decoration: none;
+  color: var(--ink);
+}
+.prose .toc-title {
+  font-size: 18pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-60);
+  margin: 0 0 4mm 0;
+}
+.prose .toc {
+  margin-bottom: 10mm;
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a Question
+    url: https://github.com/cityhunteur/ia-writer-templates/discussions
+    about: Please ask and answer questions in Discussions
+  - name: iA Writer Support
+    url: https://ia.net/writer/support
+    about: For issues with iA Writer itself, contact official support

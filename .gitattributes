@@ -1,0 +1,59 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Text files
+*.py text
+*.html text
+*.css text
+*.js text
+*.json text
+*.md text
+*.yml text
+*.yaml text
+*.txt text
+*.sh text
+*.plist text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.iatemplate binary
+
+# Python files
+*.py text eol=lf
+*.pyi text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Templates
+*.html text
+*.css text
+
+# Config files
+.gitignore text
+.gitattributes text
+.editorconfig text
+
+# GitHub specific
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
+
+# Mark generated files
+dist/* linguist-generated=true
+*.egg-info/* linguist-generated=true
+__pycache__/* linguist-generated=true
+
+# Markdown
+*.md text diff=markdown
+
+# Documentation
+README.md text
+CHANGELOG.md text
+LICENSE text
+AGENTS.md text

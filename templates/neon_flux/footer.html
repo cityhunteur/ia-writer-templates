@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .ftr {
+      position: relative; box-sizing: border-box; width: 100%;
+      height: 100%; padding: 0 22mm;
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--ink-60); font-size: 9pt;
+    }
+    .ftr::before{
+      content:""; position:absolute; left:0; right:0; top:0; height:1px;
+      background: linear-gradient(90deg, var(--neon-violet), var(--neon-cyan));
+      opacity: .6;
+    }
+    .page { font-variant-numeric: tabular-nums; color: var(--ink-70); }
+    .sep { opacity:.5; padding: 0 4mm; }
+    @media print {
+      .ftr { border-top: 1px solid var(--rule); }
+      .ftr::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ftr">
+    <div class="left">
+      <span class="page" data-page-number>1</span>
+      <span class="sep">•</span>
+      <span data-title>Title</span>
+    </div>
+    <div class="right"></div>
+  </div>
+</body>
+</html>
