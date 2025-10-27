@@ -107,7 +107,7 @@ jobs:
           echo "✅ All templates built successfully"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: templates-${{ github.sha }}
           path: dist/templates/
@@ -133,7 +133,7 @@ jobs:
         run: uv build
 
       - name: Upload distribution artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
