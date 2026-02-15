@@ -12,7 +12,6 @@
   "header_height": 90,
   "footer_height": 90,
   "assets": [
-    "document.html",
     "github.css",
     "github-markdown-light.css",
     "github-markdown-dark.css",

@@ -9,7 +9,7 @@
 4. **Python Version**: Requires Python 3.13+ (this is non-negotiable)
 
 ## Project Structure & Module Organization
-- `src/ia_writer_templates/main.py` scans the `templates/` directory and builds an `.iatemplate` for each subdirectory
+- `src/ia_writer_templates/main.py` is the CLI entry point; `config.py` handles bundle.json loading/validation; `fragments.py` loads fragments and renders placeholders; `builder.py` orchestrates the build
 - Shared fragments (Info.plist, title, header, footer, document) live in `src/fragments/`; place overrides inside `templates/<template_name>/`
 - Templates use unified `style.css` with light mode as default and `html.night-mode` for dark mode
 - Never edit files in `dist/` by hand—always rebuild
@@ -39,7 +39,7 @@
 ## Template Packaging Tips
 - Keep metadata in `bundle.json`; add new themes by cloning an existing directory under `templates/` and adjusting the JSON
 - Use single `style.css` with `html.night-mode` for dark mode - DO NOT create separate light/dark CSS files
-- List all assets in `bundle.json` under the `assets` key (including HTML fragments if customized)
+- List only static resources (CSS, fonts, images, licences) in `bundle.json` under the `assets` key. **Do not** include fragment HTML files (`document.html`, `title.html`, `header.html`, `footer.html`) or `Info.plist` — these are rendered by the fragment pipeline automatically
 - Validate after building—incorrect CSS selectors or Info.plist keys break iA Writer installation
 
 ## Known Issues & Solutions
@@ -78,7 +78,10 @@
 
 ## Important Files
 
-- `src/ia_writer_templates/main.py` - Build engine
+- `src/ia_writer_templates/main.py` - CLI entry point
+- `src/ia_writer_templates/builder.py` - Build engine
+- `src/ia_writer_templates/config.py` - BundleConfig dataclass & validation
+- `src/ia_writer_templates/fragments.py` - Fragment loading & rendering
 - `templates/neon_flux/style.css` - Unified styles (reference for CSS structure)
 - `templates/neon_flux/bundle.json` - Configuration example
 - `tests/test_github_template.py` - Integration tests

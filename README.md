@@ -70,7 +70,10 @@ ia-writer-templates/
 ├── src/
 │   ├── ia_writer_templates/
 │   │   ├── __init__.py
-│   │   └── main.py           # Template build engine
+│   │   ├── main.py           # CLI entry point
+│   │   ├── config.py         # BundleConfig dataclass & validation
+│   │   ├── fragments.py      # Fragment loading & placeholder rendering
+│   │   └── builder.py        # TemplateBuilder orchestration
 │   └── fragments/            # Shared HTML/plist fragments
 │       ├── Info.plist
 │       ├── title.html
@@ -125,10 +128,6 @@ ia-writer-templates/
      "header_height": 90,
      "footer_height": 90,
      "assets": [
-       "document.html",
-       "title.html",
-       "header.html",
-       "footer.html",
        "style.css"
      ],
      "skip_fragments": []
@@ -206,7 +205,7 @@ The `tests/fixtures/` directory contains the official GitHub template for compar
 | `slug` | string | Internal identifier |
 | `header_height` | integer | Header area height in pixels |
 | `footer_height` | integer | Footer area height in pixels |
-| `assets` | array | Files to copy to bundle |
+| `assets` | array | Static resources to copy (CSS, fonts, images, licences). Must **not** include fragment files (`document.html`, `title.html`, `header.html`, `footer.html`, `Info.plist`) |
 | `skip_fragments` | array | Fragments to exclude (e.g., ["title.html"]) |
 | `supports_smart_tables` | boolean | Enable smart table support (optional) |
 | `supports_math` | boolean | Enable math/LaTeX support (optional) |
@@ -249,6 +248,10 @@ If you prefer Hatch but encounter errors with `hatch run`, use uv or Python dire
 # Instead of: hatch run build
 uv run python -m ia_writer_templates.main
 ```
+
+### Fragment Files in Assets
+**Problem**: Build fails with `assets must not include reserved fragment files`
+**Solution**: Remove `document.html`, `title.html`, `header.html`, `footer.html`, and `Info.plist` from the `assets` array in `bundle.json`. These files are rendered by the fragment pipeline automatically and must not be listed as assets.
 
 ### Missing Dependencies
 

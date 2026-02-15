@@ -12,10 +12,6 @@
   "header_height": 56,
   "footer_height": 40,
   "assets": [
-    "document.html",
-    "title.html",
-    "header.html",
-    "footer.html",
     "style.css",
     "LICENSE.txt"
   ],
